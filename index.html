@@ -443,12 +443,28 @@ function handleComplete(evt,comp) {
 	//Code to support hidpi screens and responsive scaling.
 	AdobeAn.makeResponsive(true,'both',true,1,[canvas,anim_container,dom_overlay_container]);	
 	AdobeAn.compositionLoaded(lib.properties.id);
-	fnStartAnimation();
+fnStartAnimation();
+
+/* Hide loading spinner */
+const loader = document.querySelector('.lds-ripple');
+if (loader) {
+    loader.style.display = 'none';
+}
 }
 function playSound(id, loop, offset) {
 	return createjs.Sound.play(id, {'interrupt':createjs.Sound.INTERRUPT_EARLY, 'loop': loop, 'offset': offset});}
 </script>
-<!-- write your code here -->
+<style>
+@media (max-width:768px){
+    #fullscreenBtn,
+    #exitFullscreenBtn,
+    #quitBtn,
+    #homeBtn{
+        font-size:12px !important;
+        padding:8px 12px !important;
+    }
+}
+</style>
 </head>
 <body onload="init();" style="margin:0px; background-color:var(--background-color);">
 	<div id="animation_container" style="background-color:var(--background-color); width:960px; height:540px">
@@ -457,5 +473,64 @@ function playSound(id, loop, offset) {
 		</div>
 	</div>
 	<div class="lds-ripple"><div></div><div></div></div>
-</body>
+<button id="fullscreenBtn"
+onclick="openFullscreen()"
+style="position:fixed;top:10px;right:10px;z-index:99999;padding:10px 16px;font-size:14px;background-color:white;color:rgb(0,89,112);border:none;border-radius:5px;cursor:pointer;">
+Go Fullscreen
+</button>
+
+<button id="exitFullscreenBtn"
+onclick="exitFullscreen()"
+style="position:fixed;top:10px;right:10px;z-index:99999;padding:10px 16px;font-size:14px;background-color:white;color:rgb(0,89,112);border:none;border-radius:5px;cursor:pointer;display:none;">
+Exit Fullscreen
+</button>
+
+<button id="homeBtn"
+onclick="window.location.href='https://um-tss.github.io/Urban-Mobility/';"
+style="position:fixed;bottom:10px;right:110px;z-index:99999;padding:10px 16px;font-size:14px;background-color:white;color:rgb(0,89,112);border:none;border-radius:5px;cursor:pointer;">
+Home
+</button>
+
+<button id="quitBtn"
+onclick="location.reload();"
+style="position:fixed;bottom:10px;right:10px;z-index:99999;padding:10px 16px;font-size:14px;background-color:white;color:rgb(0,89,112);border:none;border-radius:5px;cursor:pointer;">
+Quit
+</button>
+
+<script>
+function openFullscreen() {
+    const elem = document.documentElement;
+
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+    }
+}
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+document.addEventListener("fullscreenchange", function () {
+    const fsBtn = document.getElementById("fullscreenBtn");
+    const exitBtn = document.getElementById("exitFullscreenBtn");
+
+    if (document.fullscreenElement) {
+        fsBtn.style.display = "none";
+        exitBtn.style.display = "block";
+    } else {
+        fsBtn.style.display = "block";
+        exitBtn.style.display = "none";
+    }
+});
+</script></body>
 </html>
